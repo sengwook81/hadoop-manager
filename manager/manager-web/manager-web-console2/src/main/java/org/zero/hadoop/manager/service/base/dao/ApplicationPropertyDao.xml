@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.base.dao.ApplicationPropertyDao">
+
+	<select id="getApplicationPropertyList" resultType="org.zero.hadoop.manager.service.base.vo.ApplicationPropertyVo">
+		SELECT 
+			a.app_Id 
+		  , a.config_Id
+		  , a.prop_Key
+		  , a.prop_Val
+		  , a.prop_Desc
+		  , a.prop_Type
+		  FROM TB_APPLICATION_CONFIG_PROPERTY a
+		  where app_Id = #{app_Id}
+		  and config_Id = #{config_Id}
+		  order by prop_Type , prop_Key
+	</select>
+	
+	<insert id="insApplicationProperty" parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationPropertyVo">
+		insert into TB_APPLICATION_CONFIG_PROPERTY (app_Id , config_Id , prop_Key , prop_Val, prop_Desc, prop_Type ) 
+		values (#{app_Id} ,#{config_Id} ,#{prop_Key} ,#{prop_Val} , #{prop_Desc} , #{prop_Type})
+	</insert>
+	
+	<update id="uptApplicationProperty" parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationPropertyVo">
+		UPDATE TB_APPLICATION_CONFIG_PROPERTY
+		SET prop_Val = #{prop_Val}		
+		, prop_Desc = #{prop_Desc}		
+		, prop_Type = #{prop_Type}
+		where app_Id = #{app_Id} 
+		 and config_Id = #{config_Id}
+		  and prop_Key = #{prop_Key}
+	</update>
+	
+	<delete id="delApplicationProperty" parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationPropertyVo">
+		delete from TB_APPLICATION_CONFIG_PROPERTY 	
+		where app_Id = #{app_Id} 
+		  and config_Id = #{config_Id}
+		  and prop_Key = #{prop_Key}
+	</delete>
+</mapper>

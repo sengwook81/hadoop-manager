@@ -1,0 +1,71 @@
+CREATE USER "zero" PASSWORD "tmddnr81";
+
+GRANT DBA TO "zero";
+
+CREATE SCHEMA INSTALLER AUTHORIZATION DBA;
+
+ALTER USER "zero" SET INITIAL SCHEMA INSTALLER;
+
+SET SCHEMA INSTALLER;
+
+CREATE TABLE TB_HOST (
+	host_id  INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1) PRIMARY KEY,
+    host_addr VARCHAR(30) NOT NULL,
+    host_name VARCHAR(50) NOT NULL,
+	host_home VARCHAR(255),
+	host_user VARCHAR(50),
+	host_password VARCHAR(30)
+);
+
+CREATE TABLE TB_HADOOP_M (
+    host_id INTEGER NOT NULL,
+    app_type VARCHAR(50),
+	app_port INTEGER,
+    CONSTRAINT PK_TB_HADOOP_M PRIMARY KEY(host_id,app_type)
+);
+
+
+CREATE TABLE TB_HIVE_M (
+    host_id  INTEGER  NOT NULL,
+    app_type VARCHAR(50) NOT NULL,
+    meta_host VARCHAR(50) NOT NULL,
+    meta_port INTEGER  NOT NULL,
+    CONSTRAINT PK_TB_HIVE_M PRIMARY KEY(host_id,app_type)
+);
+
+CREATE TABLE TB_HBASE_M (
+    host_id  INTEGER NOT NULL,
+    app_type VARCHAR(50),
+	app_port INTEGER,
+    CONSTRAINT PK_TB_HBASE_M PRIMARY KEY(host_id,app_type)
+);
+
+
+
+CREATE TABLE TB_ZOOKEEPER_M (
+    host_id  INTEGER NOT NULL,
+    app_type VARCHAR(50) NOT NULL,
+    app_port INTEGER NOT NULL,
+    CONSTRAINT PK_TB_ZOOKEEPER_M PRIMARY KEY(host_id,app_type)
+);
+
+CREATE TABLE TB_CONFIG_M
+(
+	config_id INTEGER GENERATED ALWAYS AS IDENTITY (START WITH 1),
+	config_app VARCHAR(50) NOT NULL,
+	config_cate VARCHAR(50) NOT NULL,
+	config_ver VARCHAR(50) NOT NULL ,
+	config_type VARCHAR(3) NOT NULL,
+	CONSTRAINT PK_TB_CONFIG_M PRIMARY KEY(config_id,config_app,config_cate,config_ver,config_type)
+)
+
+CREATE TABLE TB_CONFIG_D
+(
+	config_id INTEGER NOT NULL,
+	config_key LONGVARCHAR NOT NULL,
+	config_value LONGVARCHAR ,
+	config_desc LONGVARCHAR ,
+	req VARCHAR(1),
+	CONSTRAINT PK_TB_CONFIG_D PRIMARY KEY(config_id,config_key)
+)
+

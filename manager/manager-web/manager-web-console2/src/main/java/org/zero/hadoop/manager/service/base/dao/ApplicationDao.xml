@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.base.dao.ApplicationDao">
+
+	<resultMap type="org.zero.hadoop.manager.service.base.vo.ApplicationSVo"
+		id="applicationMap">
+		<id property="app_Id" column="app_Id" />
+		<result property="app_Name" column="app_Name" />
+		<result property="app_Ver" column="app_Ver" />
+		<result property="app_Processor_Name" column="app_Processor_Name" />
+		<result property="cluster_Yn" column="cluster_Yn" />
+			
+		<collection property="configs" ofType="org.zero.hadoop.manager.service.base.vo.ApplicationConfigVo">
+			  	<id property="config_Id" column="config_Id" />
+			  	<result property="app_Id" column="config_App_Id" />
+				<result property="config_Name" column="config_Name" />
+				<result property="config_Type" column="config_Type" />
+		</collection>
+	</resultMap>
+
+	<select id="getApplicationConfigList"
+		resultMap="applicationMap">
+		SELECT 
+			a.app_Id 
+		  , a.app_Name
+		  , a.app_Ver
+		  , a.app_Processor_Name
+		  , a.cluster_Yn
+		  , b.app_Id config_App_Id
+		  , b.config_Id
+		  , b.config_Name
+		  , b.config_Type
+		  FROM TB_APPLICATION a 
+		  LEFT JOIN TB_APPLICATION_CONFIG b
+		  ON (a.app_Id = b.app_Id)
+	</select>
+	
+	<select id="getApplication" parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationVo"
+		resultType="org.zero.hadoop.manager.service.base.vo.ApplicationVo">
+		SELECT
+		a.app_Id
+		, a.app_Name
+		, a.app_Ver
+		, a.app_Processor_Name
+		, a.cluster_Yn
+		FROM TB_APPLICATION a
+	   WHERE app_Id = #{app_Id} 
+	</select>
+	
+	
+	<select id="getApplicationList"
+		resultType="org.zero.hadoop.manager.service.base.vo.ApplicationVo">
+		SELECT
+		a.app_Id
+		, a.app_Name
+		, a.app_Ver
+		, a.app_Processor_Name
+		, a.cluster_Yn
+		FROM TB_APPLICATION a
+	</select>
+
+	<insert id="insApplication"
+		parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationVo">
+		insert into TB_APPLICATION (app_Id , app_Name , app_Ver
+		, app_Processor_Name , cluster_Yn )
+		values (#{app_Id} ,#{app_Name} ,#{app_Ver} ,#{app_Processor_Name} ,#{cluster_Yn} )
+	</insert>
+
+	<update id="uptApplication"
+		parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationVo">
+		UPDATE TB_APPLICATION
+		SET app_Name = #{app_Name}
+		, app_Ver = #{app_Ver}
+		, app_Processor_Name = #{app_Processor_Name}
+		, cluster_Yn = #{cluster_Yn}
+		where app_Id
+		= #{app_Id}
+	</update>
+
+	<delete id="delApplication"
+		parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationVo">
+		delete from TB_APPLICATION
+		where app_Id = #{app_Id}
+	</delete>
+</mapper>

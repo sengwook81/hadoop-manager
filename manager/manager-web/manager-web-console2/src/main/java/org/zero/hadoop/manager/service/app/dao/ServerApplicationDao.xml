@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.app.dao.ServerApplicationDao">
+
+
+	<select id="getServerApplication" parameterType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo" resultType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo">
+	   SELECT SERVER_ID, GROUP_ID, APP_ID, IFNULL(APP_EXT_OPTS,'') APP_EXT_OPTS, IFNULL(INSTALL_FLAG,'N') as INSTALL_FLAG, INSTALL_STATUS FROM TB_SERVER_APPLICATION
+		 WHERE GROUP_ID = #{group_Id}
+		   AND SERVER_ID = #{server_Id}
+		   AND APP_ID = #{app_Id}
+	</select>
+	
+	<select id="getServerApplications" parameterType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo" resultType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo">
+	   Select A.SERVER_NAME , A.HOST_INFO  , #{app_Id} as APP_ID, A.SERVER_ID , A.GROUP_ID , IFNULL(B.APP_EXT_OPTS,'') APP_EXT_OPTS, IFNULL(B.INSTALL_FLAG,'N') as INSTALL_FLAG
+	   	    , CASE WHEN B.APP_ID IS NULL THEN false ELSE true end as row_Flag
+		 from TB_SERVER A 
+	LEFT OUTER JOIN TB_SERVER_APPLICATION B
+		   ON (A.SERVER_ID = B.SERVER_ID 
+		  AND  A.GROUP_ID = B.GROUP_ID
+		  AND B.APP_ID = #{app_Id})
+     order by A.GROUP_ID , A.SERVER_NAME
+	</select>
+
+	<insert id="insServerApplication"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo">
+		 INSERT INTO HMANAGER.TB_SERVER_APPLICATION
+				( SERVER_ID, GROUP_ID, APP_ID, APP_EXT_OPTS, install_Flag, install_Status) 
+				VALUES
+				( #{server_Id},#{group_Id},#{app_Id},#{app_Ext_Opts},#{install_Flag} , #{install_Status})
+	</insert>
+
+	<update id="uptServerApplication"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo">
+		UPDATE TB_SERVER_APPLICATION
+		SET app_Ext_Opts = #{app_Ext_Opts}
+		, install_Flag = #{install_Flag}		
+		, install_Status = #{install_Status}
+		where server_Id = #{server_Id}
+		  and group_Id = #{group_Id} 
+		  and app_Id = #{app_Id}
+	</update>
+	
+	<update id="uptServerApplicationStatus"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo">
+		UPDATE TB_SERVER_APPLICATION
+		SET install_Status = #{install_Status}
+		where server_Id = #{server_Id}
+		  and group_Id = #{group_Id} 
+		  and app_Id = #{app_Id}
+	</update>
+	
+
+	<delete id="delServerApplication"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo">
+		delete from TB_SERVER_APPLICATION
+		where server_Id = #{server_Id}
+		  and group_Id = #{group_Id} 
+		  and app_Id = #{app_Id}
+	</delete>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.base.dao.ServerDao">
+
+<select id="getServer" parameterType="org.zero.hadoop.manager.service.base.vo.ServerVo" resultType="org.zero.hadoop.manager.service.base.vo.ServerVo">
+		SELECT 
+			a.server_id 
+		  , a.server_name
+		  , a.host_info
+		  , a.user_id
+		  , a.user_pwd
+		  , a.group_id 
+		  FROM TB_SERVER a
+		  where server_id = #{server_Id}
+		   and group_Id = #{group_Id}
+	</select>
+	
+	<select id="getServerList" resultType="org.zero.hadoop.manager.service.base.vo.ServerVo">
+		SELECT 
+			a.server_id 
+		  , a.server_name
+		  , a.host_info
+		  , a.user_id
+		  , a.user_pwd
+		  , a.group_id 
+		  FROM TB_SERVER a
+	</select>
+	
+	<insert id="insServer" parameterType="org.zero.hadoop.manager.service.base.vo.ServerVo">
+		insert into TB_SERVER (server_Id , server_Name , host_Info , user_Id , user_Pwd , group_id ) 
+		values (#{server_Id} ,#{server_Name} ,#{host_Info} ,#{user_Id} ,#{user_Pwd} ,#{group_Id} )
+	</insert>
+	
+	<update id="uptServer" parameterType="org.zero.hadoop.manager.service.base.vo.ServerVo">
+		UPDATE TB_SERVER 
+		SET server_Name = #{server_Name}		
+		, host_Info = #{host_Info}		
+		, user_Id = #{user_Id}
+		, user_Pwd = #{user_Pwd}
+		, group_Id = #{group_Id}
+		where server_Id = #{server_Id} 
+	</update>
+	
+	<delete id="delServer" parameterType="org.zero.hadoop.manager.service.base.vo.ServerVo">
+		delete from TB_SERVER 	
+		where server_Id = #{server_Id} 
+	</delete>
+</mapper>

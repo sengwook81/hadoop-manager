@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding= "UTF-8"?>
+<configuration>
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- Daily rollover -->
+			<!-- 
+				<fileNamePattern>/www2/users/imagelog/imgServer.%d{yyyy-MM-dd}.log</fileNamePattern>
+			-->
+			<fileNamePattern>/Users/zero/imagelog/imgServer.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- Keep 7 days' worth of history -->
+			<maxHistory>3</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>[%thread]%d{HH:mm:ss,SSS} %5p [%-40.40c] %m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%thread]%d{HH:mm:ss} %5p [%-40.40c] %m%n</pattern>
+		</encoder>
+
+	</appender>
+	<logger name="java.sql" level="TRACE">
+		<appender-ref ref="console" />
+	</logger>
+	
+	<logger name="org.apache" level="INFO">
+		<appender-ref ref="console" />
+	</logger>
+	
+	<logger name="org.zero" level="TRACE">
+		<appender-ref ref="console" />
+	</logger>
+
+	<logger name="org.springframework" level="TRACE">
+		<appender-ref ref="console" />
+	</logger>
+
+	<root>
+		<level value="INFO" />
+		<!-- <appender-ref ref="console" /> -->
+	</root>
+
+</configuration>

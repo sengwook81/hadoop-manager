@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css"
+	href="../lib/ext-4.2.1.883/resources/css/ext-all.css">
+<link rel="stylesheet" type="text/css" href="../lib/ext-4.2.1.883/examples/desktop/css/desktop.css" />
+<script type="text/javascript"
+	src="../lib/ext-4.2.1.883/ext-all-debug-w-comments.js"></script>
+<script type="text/javascript" src="../zero/util/zero-collection.js"></script>	
+<script type="text/javascript" src="index.js"></script>
+</head>
+<body>
+</body>
+ <script type="text/javascript">
+	Ext.Loader.setConfig({
+	    enabled: true,
+//	    disableCaching: (/^true$/i).test(config.extjs_ajax_disable_cache)
+	});
+	
+	Ext.Loader.setPath({
+	    'Ext.ux.desktop': '../lib/ext-4.2.1.883/examples/desktop/js',
+	    'MyDesktop': '../lib/ext-4.2.1.883/examples/desktop',
+	    'Zero': '../zero',
+	});
+	
+	Ext.Ajax.defaultHeaders = {
+	    'Accept' : 'application/json'
+	};
+
+	Ext.require('Zero.store.install.Nodes');
+	Ext.onReady(function () {
+		console.log("Initialized Application : ",Zero.app);
+		
+		var store = Ext.create("Zero.store.install.Nodes"); 
+		console.log(store);
+		store.load();
+		store.each(function (record){
+			console.log(record);
+		});
+		
+		Zero.app.controllers = new Map();
+		Zero.app.viewport.add(Ext.create('Zero.view.install.Node',{
+			width:1000,
+			height:500,
+			//renderTo:Ext.getBody()
+		}));
+	});
+</script>
+
+</html>

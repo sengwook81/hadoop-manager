@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.app.dao.HadoopDao">
+
+	<select id="getServerApplications" parameterType="org.zero.hadoop.manager.service.app.vo.ServerApplicationVo" resultType="org.zero.hadoop.manager.service.app.vo.HadoopVo">
+	   Select A.SERVER_NAME , A.HOST_INFO  , #{app_Id} as APP_ID, A.SERVER_ID , A.GROUP_ID , B.APP_EXT_OPTS , B.INSTALL_FLAG
+	   	    , CASE WHEN B.APP_ID IS NULL THEN false ELSE true end as row_Flag
+		 from TB_SERVER A 
+	LEFT OUTER JOIN TB_SERVER_APPLICATION B
+		   ON (A.SERVER_ID = B.SERVER_ID 
+		  AND  A.GROUP_ID = B.GROUP_ID
+		  AND B.APP_ID = #{app_Id})
+     order by A.GROUP_ID , A.SERVER_NAME
+	</select>
+</mapper>

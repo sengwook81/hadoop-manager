@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.base.dao.ServerGroupDao">
+
+	
+	<select id="getServerGroupList" resultType="org.zero.hadoop.manager.service.base.vo.ServerGroupVo">
+		SELECT 
+			a.group_id 
+		  , a.group_Name
+		  , a.group_Desc 
+		  FROM TB_SERVERGROUP a
+	</select>
+	
+	<insert id="insServerGroup" parameterType="org.zero.hadoop.manager.service.base.vo.ServerGroupVo">
+		insert into TB_SERVERGROUP (group_Id , group_Name , group_Desc ) 
+		values (#{group_Id} , #{group_Name} , #{group_Desc} )
+	</insert>
+	
+	<update id="uptServerGroup" parameterType="org.zero.hadoop.manager.service.base.vo.ServerGroupVo">
+		UPDATE TB_SERVERGROUP 
+		SET group_name = #{group_Name}		
+		, group_desc = #{group_Desc}		
+		where group_id = #{group_Id} 
+	</update>
+	
+	<delete id="delServerGroup" parameterType="org.zero.hadoop.manager.service.base.vo.ServerGroupVo">
+		delete from TB_SERVERGROUP 	
+		where group_id = #{group_Id} 
+	</delete>
+</mapper>

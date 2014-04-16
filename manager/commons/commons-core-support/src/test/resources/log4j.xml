@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration 
+    xmlns:log4j="http://jakarta.apache.org/log4j/" 
+    debug="true">
+    
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %5p [%-40.40c] %m%n" />
+        </layout>   
+    </appender>
+    <logger name="java.sql" additivity="false">
+        <level value="DEBUG"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+	<logger name="org.apache" additivity="false">
+        <level value="TRACE"/>
+        <appender-ref ref="console"/>
+    </logger>
+    
+     <logger name="org.zero" additivity="false">
+        <level value="TRACE"/>
+        <appender-ref ref="console"/>
+    </logger>
+
+    <logger name="org.springframework" additivity="false">
+        <level value="TRACE"/>
+        <appender-ref ref="console" />
+    </logger>
+    
+    <root>
+        <level value="INFO" />
+        <!-- <appender-ref ref="console" /> -->
+    </root>
+                       
+</log4j:configuration>

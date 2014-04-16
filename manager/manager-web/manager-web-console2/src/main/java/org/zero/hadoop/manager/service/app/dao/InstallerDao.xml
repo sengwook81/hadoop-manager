@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.app.dao.InstallerDao">
+
+	<select id="getAppServers" parameterType="org.zero.hadoop.manager.service.app.vo.InstallerVo" resultType="org.zero.hadoop.manager.service.app.vo.InstallerVo">
+	SELECT A.SERVER_ID,
+		   A.GROUP_ID,
+		   B.SERVER_NAME,
+	       A.APP_ID,
+		   A.APP_EXT_OPTS,
+		   A.INSTALL_FLAG,
+		   A.INSTALL_STATUS
+	  from TB_SERVER_APPLICATION A
+	  JOIN TB_SERVER B 
+	    ON (A.SERVER_ID = B.SERVER_ID 
+	   AND  A.GROUP_ID = B.GROUP_ID)
+	 WHERE  A.APP_ID =  #{app_Id}
+     ORDER BY A.GROUP_ID , B.SERVER_NAME
+	</select>
+</mapper>

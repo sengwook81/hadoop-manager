@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.base.dao.ApplicationConfigDao">
+
+	<select id="getApplicationConfig" parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationConfigVo" 
+									  resultType="org.zero.hadoop.manager.service.base.vo.ApplicationConfigVo">
+		SELECT 
+			a.app_Id 
+		  , a.config_Id
+		  , a.config_Name
+		  , a.config_Type
+		  FROM TB_APPLICATION_CONFIG a
+		  where app_Id = #{app_Id}
+	</select>
+	
+	<insert id="insApplicationConfig" parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationConfigVo">
+		insert into TB_APPLICATION_CONFIG (app_Id , config_Id , config_Name , config_Type ) 
+		values (#{app_Id} ,#{config_Id} ,#{config_Name} ,#{config_Type} )
+	</insert>
+	
+	<update id="uptApplicationConfig" parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationConfigVo">
+		UPDATE TB_APPLICATION_CONFIG 
+		SET config_Name = #{config_Name}		
+		, config_Type = #{config_Type}		
+		where app_Id = #{app_Id} 
+		 and config_Id = #{config_Id}
+	</update>
+	
+	<delete id="delApplicationConfig" parameterType="org.zero.hadoop.manager.service.base.vo.ApplicationConfigVo">
+		delete from TB_APPLICATION_CONFIG 	
+		where app_Id = #{app_Id} 
+		 and config_Id = #{config_Id}
+	</delete>
+</mapper>
