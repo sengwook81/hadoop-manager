@@ -29,15 +29,9 @@ public class FutureThreadPool<T> {
 		retFutures.add(submit);
 	}
 
-	public void excuteJob(Callable<T> callable, FutureReciever<T> receiver) {
-		Future<T> submit = threadPool.submit(callable);
-		if (receiver != null) {
-			receiver.setFuture(submit);
-		}
-	}
-
-	public void excuteJob(Runnable runnable, ThreadReciever<T> receiver) {
-		Future<?> rslt = threadPool.submit(runnable);
+	public void excuteJob(Runnable runnable) {
+		
+		threadPool.execute(runnable);
 	}
 
 	public <K extends T> List<K> waitFinish() {
@@ -79,7 +73,6 @@ public class FutureThreadPool<T> {
 
 			for (int k = 0; k < 100; k++) {
 				futureThreadPool.excuteJob(new Runnable() {
-					
 					@Override
 					public void run() {
 						int tot = 0;
@@ -87,7 +80,7 @@ public class FutureThreadPool<T> {
 							tot += n;
 						System.out.println(tot);
 					}
-				},null);
+				});
 			}
 			// futureThreadPool.waitFinish();
 

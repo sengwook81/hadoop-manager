@@ -1,6 +1,8 @@
 package org.zero.hadoop.manager.service.app.processor;
 
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +20,14 @@ public class ProcessMonitorSheduler {
 	@Scheduled(fixedDelay = 15000)
 	public void removeOldStatus() {
 		long timeInMillis = Calendar.getInstance().getTimeInMillis();
-		for (String key : monitor.getProcessMap().keySet()) {
-			if (timeInMillis - monitor.getProcessMap().get(key).getProcess_Time() > 15000) {
-				logger.debug("Remove Old Status -> {}", monitor.getProcessMap().get(key));
-				monitor.getProcessMap().remove(key);
+		
+		Iterator<Entry<String, ProcessMonitorVo>> iterator = monitor.getProcessMap().entrySet().iterator();
+		while(iterator.hasNext()) {
+			Entry<String, ProcessMonitorVo> item = iterator.next();
+			if (timeInMillis - item.getValue().getProcess_Time() > 15000) {
+				logger.debug("##### Remove Old Status -> {} , {}",item.getKey(),  item.getValue());
+				//monitor.getProcessMap().remove(item.getKey());
+				iterator.remove();
 			}
 		}
 	}

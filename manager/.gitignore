@@ -22,3 +22,6 @@
 
 *.tar.gz
 
+.DS_Store
+*/.DS_Store
+*/*/.DS_Store

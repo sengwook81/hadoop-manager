@@ -30,11 +30,11 @@
 		<appender-ref ref="console" />
 	</logger>
 	
-	<logger name="org.zero" level="TRACE">
+	<logger name="org.zero" level="DEBUG">
 		<appender-ref ref="console" />
 	</logger>
 
-	<logger name="org.springframework" level="TRACE">
+	<logger name="org.springframework" level="INFO">
 		<appender-ref ref="console" />
 	</logger>
 

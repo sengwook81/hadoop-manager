@@ -10,12 +10,15 @@ import com.jcraft.jsch.JSchException;
 public class SshClientTest {
 
 	@Test
-	public void tarDeCompressTest() {
-		SecureShellSession ssh = new SecureShellSession(3000);
-		ssh.setHost("10.10.75.131");
-		ssh.setUsername("dooby");
-		ssh.setPassword("hadoop");
-		SftpClient sc = new SftpClient(ssh);
+	public void sshCommandTest() throws Exception {
+		SshClient sc = new SshClient("data3", "installer", "hadoop");
+		String result = sc.sendShell("ls --color=never -b ~/zhome/temp/bc3885cb-9176-437c-af77-e132b2e1587a");
+		System.out.println("[" + result + "]");
+	}
+
+	// @Test
+	public void tarDeCompressTest() throws Exception {
+		SshClient sc = new SshClient("name1", "installer", "hadoop");
 		try {
 
 			sc.upload("installer_test", "/Users/appszero/Downloads/hadoop-1.2.1 (1).tar.gz", new ProgressMonitor() {
@@ -42,7 +45,7 @@ public class SshClientTest {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		//SshClient sshClient = new SshClient();
+		// SshClient sshClient = new SshClient();
 	}
 
 }

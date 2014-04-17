@@ -90,9 +90,9 @@ public class SecureShellSession {
 		this.timeout = timeout;
 	}
 
-	Session getSession() throws JSchException 
+	public Session getSession() throws JSchException 
 	{
-		if(singleSession && lastSession != null) {
+		if(lastSession != null) {
 			try {
 				lastSession.sendKeepAliveMsg();
 			} catch (Exception e) {

@@ -9,7 +9,7 @@ import com.jcraft.jsch.SftpProgressMonitor;
  * @author SengWook Jung
  *
  */
-public class SftpProgressMonitorWrap implements SftpProgressMonitor {
+public class SFtpProgressMonitorWrap implements SftpProgressMonitor {
 
 	private long maxSize;
 	private long counter = 0;
@@ -25,7 +25,7 @@ public class SftpProgressMonitorWrap implements SftpProgressMonitor {
 		}
 	};
 
-	public SftpProgressMonitorWrap(long maxSize,ProgressMonitor monitor) {
+	public SFtpProgressMonitorWrap(long maxSize,ProgressMonitor monitor) {
 		this.maxSize = maxSize;
 		if(monitor != null) {
 			this.monitor = monitor;

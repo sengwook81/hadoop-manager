@@ -87,7 +87,7 @@ Ext.define("Zero.view.app.Installer", {
 			    	console.log(record.get('install_Flag'),record);
 			    	if(record.get('install_Flag') != 'F') {
 			        return  '<div style="float:left; font-size: 13px; line-height: 1em;">'
-	                + 'INSTALL' 
+	               // + 'INSTALL' 
 	                + '</div>';
 			    	}
 			    	else {
@@ -100,8 +100,9 @@ Ext.define("Zero.view.app.Installer", {
     	            {
     	                // icon:'some_icon.png',
     	                handler : function (grid, rowIndex, colIndex, item, e, record) {
-    	                	console.log("Click ", record);
-    	                	this.fireEvent('click', this);
+    	                	if(record.get('install_Flag') == 'F') {
+    	                		this.fireEvent('click', this);
+    	                	}
     	                },
     	                scope : me
     	            }

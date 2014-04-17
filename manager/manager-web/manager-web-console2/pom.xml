@@ -91,6 +91,11 @@
 			<artifactId>commons-dbcp</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.cverges.expect4j</groupId>
+			<artifactId>expect4j</artifactId>
+			<version>1.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>console2</finalName>

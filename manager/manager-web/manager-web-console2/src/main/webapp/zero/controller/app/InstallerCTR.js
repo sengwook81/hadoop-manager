@@ -90,14 +90,13 @@ Ext.define('Zero.controller.app.InstallerCTR', {
 			},
 			'#gridServers actioncolumn' : {
 				click : function(obj, el, row, col, event, record) {
+					console.log("Uninstall Record" , record);
 					if (record.get("install_Flag") == 'F') {
-
-					} else {
 						var writer = Ext.create('Ext.data.writer.Json');
 						// 설치 설택된 아이템 추출
 						
 						Ext.Ajax.request({
-							url : '/console2/application/installer/install.json',
+							url : '/console2/application/installer/uninstall.json',
 							headers : {
 								'accept' : 'application/json'
 							},

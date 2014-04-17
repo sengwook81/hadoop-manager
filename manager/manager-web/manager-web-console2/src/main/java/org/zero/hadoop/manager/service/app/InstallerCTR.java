@@ -1,8 +1,6 @@
 package org.zero.hadoop.manager.service.app;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.zero.commons.core.support.thread.FutureReciever;
 import org.zero.hadoop.manager.service.app.cmp.AppInstallStatus;
 import org.zero.hadoop.manager.service.app.cmp.InstallerPool;
 import org.zero.hadoop.manager.service.app.dao.InstallerDao;
@@ -28,12 +25,9 @@ import org.zero.hadoop.manager.service.base.vo.ApplicationVo;
 import org.zero.hadoop.manager.util.ListWrap;
 
 @Controller
-public class InstallerCTR implements ApplicationContextAware, FutureReciever<AppInstallProcessor> {
+public class InstallerCTR implements ApplicationContextAware {
 
 	private static Logger logger = LoggerFactory.getLogger(InstallerCTR.class);
-
-	// private static HashMap<String,String> SUCCESS_EXECUTE = new
-	// HashMap<String,String>();
 
 	@Autowired
 	ProcessMonitor monitor;
@@ -105,9 +99,10 @@ public class InstallerCTR implements ApplicationContextAware, FutureReciever<App
 
 					// getApplicationInstallProcessor Bean
 					AppInstallProcessor processorBean = applicationContext.getBean(application.getApp_Processor_Name(), AppInstallProcessor.class);
+					processorBean.setInstallFlag(true);
 					processorBean.setParam(appServer);
 					// Do Install Start
-					installerPool.excuteJob(processorBean, this);
+					installerPool.excuteJob(processorBean);
 					// getInstall Processor Bean
 				}
 			}
@@ -123,14 +118,37 @@ public class InstallerCTR implements ApplicationContextAware, FutureReciever<App
 		return model;
 	}
 
+	@RequestMapping("/application/installer/uninstall")
+	public Model unInstallApplication(@RequestBody InstallerVo param, Model model) {
+		logger.debug("TX BEGIN get UnInstaller Apps With {} ", param);
+
+		String failItems = "";
+		ServerApplicationVo appServer = serverApplicationDao.getServerApplication(param);
+		logger.debug("UnInstall Logic Check {} ", appServer);
+		if (appServer != null && appServer.getInstall_Flag().equals("F")) {
+			// SetProcess Status
+			serverApplicationDao.uptServerApplication(appServer);
+
+			// Application Installer Bean Info Select
+			ApplicationVo application = applicationDao.getApplication(new ApplicationVo(appServer.getApp_Id()));
+
+			// getApplicationInstallProcessor Bean
+			AppInstallProcessor processorBean = applicationContext.getBean(application.getApp_Processor_Name(), AppInstallProcessor.class);
+
+			processorBean.setInstallFlag(false);
+			processorBean.setParam(appServer);
+			// Do UnInstall Start
+			installerPool.excuteJob(processorBean);
+			// getInstall Processor Bean
+		}
+
+			model.addAttribute("_rslt", "SUCCESS");
+		logger.debug("TX FINISH get UnInstaller Apps With {} ", model);
+		return model;
+	}
+
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 		this.applicationContext = applicationContext;
 	}
-
-	@Override
-	public void setFuture(Future<AppInstallProcessor> future) {
-		logger.debug("Finish Hadoop Execute");
-	}
-
 }
