@@ -12,7 +12,6 @@ Ext.define('Zero.ex.grid.BoolCheckColumn', {
 		me.callParent();
 	},
 	listeners : {
-		// 해당 체크박스 선택시 NewRow인 경우 해당 Row를 바로 삭제처리한다.
 		checkchange : function(el, rowIndex, checked, opts) {
 			var me = this;
 			if(el['dataIndex']) {

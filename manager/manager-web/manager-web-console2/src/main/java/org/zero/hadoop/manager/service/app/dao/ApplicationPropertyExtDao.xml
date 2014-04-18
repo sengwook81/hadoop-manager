@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zero.hadoop.manager.service.app.dao.ApplicationPropertyExtDao">
+
+<!-- 
+	<select id="getApplicationPropertyExt"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo"
+		resultType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo">
+		SELECT APP_ID , CONFIG_ID , PROP_KEY , PROP_VAL , APP_EXT_OPTS
+		FROM TB_APPLICATION_CONFIG_PROPERTY_EXT
+		WHERE APP_ID = #{app_Id}
+		AND CONFIG_ID = #{config_Id}
+	</select>
+ -->
+
+	<select id="getApplicationPropertyExt"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo"
+		resultType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo">
+	<![CDATA[
+		SELECT A.APP_ID , A.CONFIG_ID , A.PROP_KEY , B.PROP_VAL , B.APP_EXT_OPTS , A.prop_Desc , A.prop_Type
+		  FROM  TB_APPLICATION_CONFIG_PROPERTY A
+		LEFT JOIN TB_APPLICATION_CONFIG_PROPERTY_EXT B
+			ON (A.APP_ID = B.APP_ID 
+			AND A.CONFIG_ID = B.CONFIG_ID
+			AND A.PROP_KEY = B.PROP_KEY)
+		WHERE A.APP_ID = #{app_Id}
+		  AND A.CONFIG_ID = #{config_Id}
+		  AND (B.PROP_KEY IS NOT NULL)
+		order by A.PROP_TYPE ,  A.PROP_KEY
+		]]>
+	</select>
+	
+	
+	<select id="getApplicationPropertySource"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo"
+		resultType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo">
+	<![CDATA[
+		select * from TB_APPLICATION_CONFIG_PROPERTY A
+		WHERE A.APP_ID = #{app_Id}
+		  AND A.CONFIG_ID = #{config_Id}
+		   AND NOT EXISTS (
+		SELECT 1 from TB_APPLICATION_CONFIG_PROPERTY_EXT 
+		WHERE A.APP_ID = APP_ID
+		AND A.CONFIG_ID = CONFIG_ID 
+		AND A.PROP_KEY = PROP_KEY
+		)
+		order by A.PROP_TYPE ,  A.PROP_KEY
+		]]>
+	</select>
+	
+
+
+	<insert id="insApplicationPropertyExt"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo">
+		INSERT INTO TB_APPLICATION_CONFIG_PROPERTY_EXT
+		( APP_ID , CONFIG_ID , PROP_KEY , PROP_VAL , APP_EXT_OPTS)
+		VALUES
+		( #{app_Id},#{config_Id},#{prop_Key},#{prop_Val},#{app_Ext_Opts} )
+	</insert>
+
+	<update id="uptApplicationPropertyExt"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo">
+		UPDATE TB_APPLICATION_CONFIG_PROPERTY_EXT
+		SET prop_Val =
+		#{prop_Val}
+		, app_Ext_Opts = #{app_Ext_Opts}
+		where app_Id = #{app_Id}
+		and config_Id = #{config_Id}
+		and prop_Key = #{prop_Key}
+	</update>
+
+
+	<delete id="delApplicationPropertyExt"
+		parameterType="org.zero.hadoop.manager.service.app.vo.ApplicationConfigPropertyExtVo">
+		delete from TB_APPLICATION_CONFIG_PROPERTY_EXT
+		where
+		app_Id = #{app_Id}
+		and config_Id = #{config_Id}
+		and prop_Key = #{prop_Key}
+	</delete>
+</mapper>
