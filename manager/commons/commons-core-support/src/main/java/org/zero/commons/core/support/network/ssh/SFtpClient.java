@@ -42,21 +42,25 @@ class SFtpClient {
 		private String path;
 		private FTP_OP op;
 		private File file;
+		
 		private ProgressMonitor monitor = null;
+		private String remoteName;
 
-		public FtpFileInfo(String path, FTP_OP op, String fileName) {
-			this(path, op, new File(fileName), null);
+		public FtpFileInfo(String path, FTP_OP op, String file) {
+			this(path, op, new File(file), null, null);
 		}
 
 		public FtpFileInfo(String path, FTP_OP op, File file) {
-			this(path, op, file, null);
+			this(path, op, file, null, null);
 		}
+		
 
-		public FtpFileInfo(String path, FTP_OP op, File file, ProgressMonitor monitor) {
+		public FtpFileInfo(String path, FTP_OP op, File file, String remoteName ,ProgressMonitor monitor) {
 			super();
 			this.path = path;
 			this.op = op;
 			this.file = file;
+			this.remoteName = remoteName;
 			this.monitor = monitor;
 		}
 
@@ -96,16 +100,37 @@ class SFtpClient {
 		public void setMonitor(ProgressMonitor monitor) {
 			this.monitor = monitor;
 		}
+
+		public String getRemoteName() {
+			if(remoteName == null ) {
+				return file.getName();
+			}
+			return remoteName;
+		}
+
+		public void setRemoteName(String remoteName) {
+			this.remoteName = remoteName;
+		}
 	}
+	
 
 	public void upload(String path, String f, ProgressMonitor monitor) throws JSchException, IOException {
-		execute(new FtpFileInfo[] { new FtpFileInfo(path, FTP_OP.upload, new File(f), monitor) });
+		execute(new FtpFileInfo[] { new FtpFileInfo(path, FTP_OP.upload, new File(f), null, monitor) });
 	}
 
 	public void upload(String path, File f, ProgressMonitor monitor) throws JSchException, IOException {
-		execute(new FtpFileInfo[] { new FtpFileInfo(path, FTP_OP.upload, f, monitor) });
+		execute(new FtpFileInfo[] { new FtpFileInfo(path, FTP_OP.upload, f, null, monitor) });
 	}
 
+	
+	public void upload(String path, String f, String remoteFileName , ProgressMonitor monitor) throws JSchException, IOException {
+		execute(new FtpFileInfo[] { new FtpFileInfo(path, FTP_OP.upload, new File(f), remoteFileName, monitor) });
+	}
+	
+	public void upload(String path, File f, String remoteFileName , ProgressMonitor monitor) throws JSchException, IOException {
+		execute(new FtpFileInfo[] { new FtpFileInfo(path, FTP_OP.upload, f, remoteFileName, monitor) });
+	}
+	
 	public void delete(String path, String f) throws JSchException, IOException {
 		execute(new FtpFileInfo[] { new FtpFileInfo(path, FTP_OP.delete, f) });
 	}
@@ -169,7 +194,7 @@ class SFtpClient {
 					}
 
 					if (command.getOp() == FTP_OP.upload) {
-						remoteFileName = command.getFile().getName();
+						remoteFileName = command.getRemoteName();
 						FileInputStream in = null;
 						long fileSize = command.getFile().length();
 						log.debug("Send File Size [{}]", fileSize);

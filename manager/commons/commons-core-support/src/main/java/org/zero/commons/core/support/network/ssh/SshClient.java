@@ -2,6 +2,7 @@ package org.zero.commons.core.support.network.ssh;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PipedInputStream;
@@ -247,6 +248,14 @@ public class SshClient {
 		channel.setInputStream(pi);
 	}
 
+	public void uploadScript(String path ,String scripts, String  name,ProgressMonitor monitor ) throws JSchException, IOException {
+			File tempScripts = File.createTempFile("ZERO", "_SCRIPTS");
+			FileWriter writer = new FileWriter(tempScripts);
+			writer.write(scripts);
+			writer.close();
+			upload(path,tempScripts,name,monitor);
+			tempScripts.delete();
+	}
 	public void upload(String path, String f, ProgressMonitor monitor) throws JSchException, IOException {
 		fileClient.upload(path, f, monitor);
 	}
@@ -254,6 +263,15 @@ public class SshClient {
 	public void upload(String path, File f, ProgressMonitor monitor) throws JSchException, IOException {
 		fileClient.upload(path, f, monitor);
 	}
+	
+	public void upload(String path, String f,  String remoteName, ProgressMonitor monitor) throws JSchException, IOException {
+		fileClient.upload(path,f,remoteName,monitor);
+	}
+	
+	public void upload(String path, File f,  String remoteName, ProgressMonitor monitor) throws JSchException, IOException {
+		fileClient.upload(path,f,remoteName,monitor);
+	}
+	
 
 	public String getHome() {
 		return home;
